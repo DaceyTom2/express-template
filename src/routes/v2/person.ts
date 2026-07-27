@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { PersonV1Controller } from '../../src/controllers/personV1Controller.js';
+import { PersonV2Controller } from '../../controllers/personV2Controller.js';
 
 const router = Router();
-const controller = new PersonV1Controller();
+const controller = new PersonV2Controller();
 
 router.get('/', controller.getAll.bind(controller));
 router.get('/:id', controller.getById.bind(controller));
