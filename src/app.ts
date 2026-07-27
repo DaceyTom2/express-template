@@ -1,11 +1,14 @@
+import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
-import pino from 'pino';
+import helmet from 'helmet';
+import logger from './logger/logger.js';
 import v1PersonRouter from './routes/v1/person.js';
 import v2PersonRouter from './routes/v2/person.js';
-import logger from './logger/logger.js';
 
 const app = express();
 
+app.use(helmet());
+app.use(cors());
 app.use(express.json());
 
 app.use((req: Request, _res: Response, next: NextFunction): void => {
