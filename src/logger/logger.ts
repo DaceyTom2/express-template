@@ -11,24 +11,27 @@ const pinoFileTransportOptions: TransportTargetOptions = {
 const pinoConsoleTransportOptions: TransportTargetOptions = {
   target: 'pino-pretty',
   level: process.env.PINO_LOG_LEVEL || 'info',
-    options: {
-        destion: 1, // 1 is stdout
-    },
+  options: {
+    destion: 1, // 1 is stdout
+  },
 };
 
 const getTransportTargetOptions = (): TransportTargetOptions[] => {
-const transportTargetOptions: TransportTargetOptions[] = [];
-if (process.env.PINO_LOG_FILE?.toLocaleLowerCase() === 'true') {
-  transportTargetOptions.push(pinoFileTransportOptions);
-}
-if (process.env.PINO_LOG_CONSOLE?.toLocaleLowerCase() === 'true') {
-  transportTargetOptions.push(pinoConsoleTransportOptions);
-}
-return transportTargetOptions;
-}
+  const transportTargetOptions: TransportTargetOptions[] = [];
+  if (process.env.PINO_LOG_FILE?.toLocaleLowerCase() === 'true') {
+    transportTargetOptions.push(pinoFileTransportOptions);
+  }
+  if (process.env.PINO_LOG_CONSOLE?.toLocaleLowerCase() === 'true') {
+    transportTargetOptions.push(pinoConsoleTransportOptions);
+  }
+  return transportTargetOptions;
+};
 
-const transports : DestinationStream = pino.transport({
+const transports: DestinationStream = pino.transport({
   targets: getTransportTargetOptions(),
 });
 
-export default pino({level: process.env.PINO_LOG_LEVEL || 'info',timestamp: pino.stdTimeFunctions.isoTime}, transports);
+export default pino(
+  { level: process.env.PINO_LOG_LEVEL || 'info', timestamp: pino.stdTimeFunctions.isoTime },
+  transports,
+);
