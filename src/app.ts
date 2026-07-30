@@ -16,13 +16,21 @@ app.use(express.json({ limit: config.BODY_LIMIT }));
 app.use(requestIdMiddleware);
 
 app.use((req: Request, _res: Response, next: NextFunction): void => {
-  logger.info({ method: req.method, url: req.url }, 'request received');
+  logger.info(
+    { method: req.method, url: req.url, requestId: req.headers['x-request-id'] },
+    'request received',
+  );
   next();
 });
 
 app.get('/', (_req: Request, res: Response): void => {
   logger.info('root route accessed');
   res.send('Hello from Express!');
+});
+
+app.use((err: Error, _req: Request, _res: Response, next: NextFunction): void => {
+  logger.error({ err }, 'unhandled application error');
+  next(err);
 });
 
 app.use('/v1/person', v1PersonRouter);

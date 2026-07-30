@@ -1,3 +1,5 @@
+import logger from '../logger/logger.js';
+
 export interface PersonV2 {
   id: number;
   firstName: string;
@@ -16,11 +18,14 @@ const people: PersonV2[] = [
 
 export class PersonV2Service {
   getAll(): PersonV2[] {
+    logger.info({ count: people.length }, 'service fetched all v2 persons');
     return people;
   }
 
   getById(id: number): PersonV2 | undefined {
-    return people.find((person) => person.id === id);
+    const person = people.find((entry) => entry.id === id);
+    logger.info({ id, found: Boolean(person) }, 'service looked up v2 person');
+    return person;
   }
 
   create(input: Omit<PersonV2, 'id'>): PersonV2 {
@@ -30,6 +35,10 @@ export class PersonV2Service {
     };
 
     people.push(person);
+    logger.info(
+      { id: person.id, firstName: person.firstName, lastName: person.lastName },
+      'service created v2 person',
+    );
     return person;
   }
 
@@ -46,6 +55,10 @@ export class PersonV2Service {
     };
 
     people[index] = updatedPerson;
+    logger.info(
+      { id, firstName: updatedPerson.firstName, lastName: updatedPerson.lastName },
+      'service updated v2 person',
+    );
     return updatedPerson;
   }
 
@@ -57,6 +70,7 @@ export class PersonV2Service {
     }
 
     people.splice(index, 1);
+    logger.info({ id }, 'service deleted v2 person');
     return true;
   }
 }
